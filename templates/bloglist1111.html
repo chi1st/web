@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyBlog</title>
+    <link rel="stylesheet" href="/static/pure-min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    {% if username == user.username %}
+    <p>亲爱的{{ user.username }}请输入blgo清单</p>
+    <!-- 这里的 none 是小写，因为这是 jinja2 模板的语法-->
+    <form class="pure-form" action="/bloglist/add" method="POST">
+        <textarea name="title" class="form-control" placeholder="标题"></textarea>
+        <textarea name="content" class="form-control" placeholder="内容"></textarea>
+        <br>
+        <button class="pure-button pure-button-primary" type="submit">发表</button>
+    </form>
+    {% endif %}
+    {% for b in bloglist %}
+        <p>
+            <a href="/bloglist/{{username}}/{{b.id}}">{{ b.title }}</a>
+            <a href="/bloglist/update/{{b.id}}">编辑</a>
+            <a href="/bloglist/delete/{{b.id}}">删除</a>
+        </label>
+            <!-- /tweet/delete/1 -->
+        </p>
+    {% endfor %}
+<div>
+    <div>
+        <h2>用户列表</h2>
+        {% for all in all_users %}
+        <a href="/bloglist/{{all.username}}"><p>{{all.username}}</p></a>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

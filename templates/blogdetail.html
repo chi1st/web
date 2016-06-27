@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1>{{b.title}}</h1>
+
+<P>{{b.content}}</P>
+
+<form class="pure-form" action="/bloglist/comment/{{b.id}}" method="POST">
+    <textarea name="comment_content" class="form-control" placeholder="评论"></textarea>
+    <br>
+    <button class="pure-button pure-button-primary" type="submit">评论</button>
+</form>
+{% if c is not none %}
+{% for comment in c %}
+<P>{{comment.comment_content}}   by   {{comment.poster}}</P>
+{% endfor %}
+{% endif %}
+</body>
+</html>

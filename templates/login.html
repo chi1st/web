@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+    <link rel="stylesheet" href="/static/pure-min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1>登录</h1>
+ {% for m in get_flashed_messages() %}
+    <h4>{{ m }}</h4>
+    {% endfor %}
+
+<form class="pure-form" action="/login" method="POST">
+    <fieldset>
+
+        <input name="username" type="text" placeholder="username">
+        <input name="password" type="password" placeholder="Password">
+
+        <button type="submit" class="pure-button pure-button-primary">登陆</button>
+    </fieldset>
+</form>
+<h1>注册</h1>
+
+<form class="pure-form" action="/register" method="POST">
+    <input name="username" type="text" placeholder="username">
+    <input name="password" type="password" placeholder="Password">
+    <button type="submit" class="pure-button pure-button-primary">注册</button>
+
+</form>
+</body>
+</html>
