@@ -1,89 +1,38 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>某某某的个人博客</title>
-<meta name="keywords" content="" />/
-<meta name="description" content="" />
-<link href="/static/css/base.css" rel="stylesheet">
-<link href="/static/css/index.css" rel="stylesheet">
-<script type="text/javascript" src='/static/js/jquery.min.js'></script>
-<script type="text/javascript" src='/static/js/sliders.js'></script>
-<!--[if lt IE 9]>
-<script src="js/modernizr.js"></script>
-<![endif]-->
+    <meta charset="UTF-8">
+    <title>MyBlog</title>
+    <link rel="stylesheet" href="/static/pure-min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<header>
-  <div class="logo">
-      <h1>某某某的个人博客</h1>
-      <p>梦虽虚幻,却是自己的梦想；位虽低微,却是自己的岗位；屋虽简陋,却是自己的家；志虽渺小,却是自己的追求。</p>
-  </div>
-  <nav id="topnav" class="f_r">
-    <ul>
-      <a href="/bloglist/{{username}}" target="_blank">首页</a>
-    <script src="js/nav.js"></script>
-  </nav>
-</header>
-<article>
-  <div class="l_box f_l">
-    <div class="topnews">
-      <h2>最新文章</h2>
-      {% for b in bloglist %}
-      <div class="blogs">
-        <ul>
-          <h3><a href="/bloglist/{{username}}/{{b.id}}">{{ b.title }}</a></h3>
-          <p>{{ b.title }}</p>
-          <p class="autor"><span class="dtime f_l">2014-02-19</span><span class="viewnum f_r">浏览（<a href="/">459</a>）</span><span class="pingl f_r">评论（<a href="/">30</a>）</span></p>
-        </ul>
-      </div>
-      {% endfor %}
+    {% if username == user.username %}
+    <p>亲爱的{{ user.username }}请输入blgo清单</p>
+    <!-- 这里的 none 是小写，因为这是 jinja2 模板的语法-->
+    <form class="pure-form" action="/bloglist/add" method="POST">
+        <textarea name="title" class="form-control" placeholder="标题"></textarea>
+        <textarea name="content" class="form-control" placeholder="内容"></textarea>
+        <br>
+        <button class="pure-button pure-button-primary" type="submit">发表</button>
+    </form>
+    {% endif %}
+    {% for b in bloglist %}
+        <p>
+            <a href="/bloglist/{{username}}/{{b.id}}">{{ b.title }}</a>
+            <a href="/bloglist/update/{{b.id}}">编辑</a>
+            <a href="/bloglist/delete/{{b.id}}">删除</a>
+        </label>
+            <!-- /tweet/delete/1 -->
+        </p>
+    {% endfor %}
+<div>
+    <div>
+        <h2>用户列表</h2>
+        {% for all in all_users %}
+        <a href="/bloglist/{{all.username}}"><p>{{all.username}}</p></a>
+        {% endfor %}
     </div>
-  <div id="pagination">
-    <ul id="pagination-flickr">
-    <li class="previous-off">&laquo;上一页</li>
-      <li class="active">1/10</li>
-      <li class="next"><a href="?page=8">下一页 &raquo;</a></li>
-   </ul>
-   </div>
-  </div>
-  <div class="r_box f_r">
-    <div class="tit01">
-      <h3>个人信息</h3>
-      <div class="gzwm">
-        <ul>
-          <li><a class="xlwb" href="#" target="_blank">{{ user.username }}</a></li>
-          <li><a class="txwb" href="#" target="_blank">{{ user.role }}</a></li>
-          <li><a class="rss" href="portal.php?mod=rss" target="_blank">RSS</a></li>
-          <li><a class="wx" href="mailto:admin@admin.com">邮箱</a></li>
-        </ul>
-      </div>
-    </div>
-    <!--tit01 end-->
-    <div class="moreSelect" id="lp_right_select">
-      <div class="ms-top">
-        <ul class="hd" id="tab">
-          <li class="cur"><a href="/">用户列表</a></li>
-        </ul>
-      </div>
-      <div class="ms-main" id="ms-main">
-        <div style="display: block;" class="bd bd-news" >
-          <ul>
-            {% for all in all_users %}
-            <li><a href="/bloglist/{{all.username}}" target="_blank"><p>{{all.username}}</p></a></li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      <!--ms-main end -->
-    </div>
-    <!--切换卡 moreSelect end -->
-  </div>
-  <!--r_box end -->
-</article>
-<footer>
-  <p class="ft-copyright">某某某的个人博客</p>
-  <div id="tbox"> <a id="togbook" href="/"></a> <a id="gotop" href="javascript:void(0)"></a> </div>
-</footer>
+</div>
 </body>
 </html>

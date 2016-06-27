@@ -38,11 +38,16 @@ def login_view():
 @app.route('/login', methods=['Post'])
 def login():
     u = User(request.form)
+    print('u',u)
+    print('u.username',u.username)
     user = User.query.filter_by(username=u.username).first()
+    print('user',user)
+    #print('user.username',user.username)
     log(user)
-    log(user.validate(u))
+    #log(user.validate(u))
     if user == None:
         log('用户登录失败')
+        flash('此用户不存在')
         return redirect(url_for('login_view'))
     elif user.validate(u):
         log('用户登录成功')
@@ -54,7 +59,7 @@ def login():
         return r
     else:
         log('用户登录失败')
-        flash('登录失败')
+        flash('用户密码错误')
         return redirect(url_for('login_view'))
 
 
@@ -180,4 +185,4 @@ def bloglist_update(bloglist_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=17700,host='0.0.0.0')
+    app.run(debug=True,port=8000)
