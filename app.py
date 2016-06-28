@@ -38,13 +38,13 @@ def login_view():
 @app.route('/login', methods=['Post'])
 def login():
     u = User(request.form)
-    print('u',u)
-    print('u.username',u.username)
+    print('u', u)
+    print('u.username', u.username)
     user = User.query.filter_by(username=u.username).first()
-    print('user',user)
-    #print('user.username',user.username)
+    print('user', user)
+    # print('user.username',user.username)
     log(user)
-    #log(user.validate(u))
+    # log(user.validate(u))
     if user == None:
         log('用户登录失败')
         flash('此用户不存在')
@@ -93,24 +93,26 @@ def bloglist_view(username):
     log('currentuser', user)
     # log('user.id',user.id)
     log('u.id', u.id)
-    log('u.bloglist',u.bloglist)
+    log('u.bloglist', u.bloglist)
     bloglist = u.bloglist
     # bloglist.sort(key=lambda t: t.created_time, reverse=True)
-    print(username,current_user().username)
-    return render_template('bloglist.html', bloglist=bloglist, username = username, user=current_user(),all_users = user_list)
+    print(username, current_user().username)
+    return render_template('bloglist.html', bloglist=bloglist, username=username, user=current_user(),
+                           all_users=user_list)
+
 
 @app.route('/bloglist/<username>/<title>')
-def blogdetail(username,title):
+def blogdetail(username, title):
     user = current_user()
     print(user)
     b = Bloglist.query.filter_by(id=title).first()
     print(b)
     c = Comment.query.filter_by(blog_title=title).all()
-    print('c',c)
-    #print(c.poster)
+    print('c', c)
+    # print(c.poster)
     print(b)
     print(b.id)
-    return render_template('blogdetail.html', current_user = user,b=b, c=c)
+    return render_template('blogdetail.html', current_user=user, b=b, c=c)
 
 
 @app.route('/bloglist/comment/<title>', methods=['POST'])
@@ -120,7 +122,7 @@ def bloglist_comment(title):
     # 设置是谁评论的
     print(c)
     c.poster = user.username
-    c.blog_title=title
+    c.blog_title = title
     # 保存到数据库
     c.save()
     return redirect(url_for('blogdetail', username=user.username, title=title))
@@ -183,6 +185,5 @@ def bloglist_update(bloglist_id):
         return redirect(url_for('bloglist_view', username=user.username))
 
 
-
 if __name__ == '__main__':
-    app.run(debug=True,port=8000)
+    app.run(debug=True, port=8000)
