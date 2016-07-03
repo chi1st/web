@@ -5,29 +5,81 @@
     <title>登录页面</title>
     <link rel="stylesheet" href="/static/pure-min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var button = $('#id-button-submit');
+            button.on('click', function(){
+                console.log('click my button');
+                var username = $('#id-text-username').val();
+                var password = $('#id-text-password').val();
+                console.log('user', username, password);
+                var account = {
+                    username : username,
+                    password : password
+                };
+                console.log('account是',account);
+                var request = {
+                    url:'/register',
+                    data: account,
+                    type: 'post',
+                    success: function(return_data){
+                        var r = return_data;
+                        console.log(r);
+                        $('#id-p-info').text(r);
+                    }
+
+                };
+                $.ajax(request);
+
+            });
+            var login_button = $('#id-login_button-submit');
+            login_button.on('click', function(){
+                console.log('click my button');
+                var username = $('#id-login_text-username').val();
+                var password = $('#id-login_text-password').val();
+                console.log('user', username, password);
+                var account = {
+                    username : username,
+                    password : password
+                };
+                console.log('account是',account);
+                var request = {
+                    url:'/login',
+                    data: account,
+                    type: 'post',
+                    success: function(return_data){
+                        var r = return_data;
+                        console.log(r);
+                        if(r=='用户密码错误' || r=='此用户不存在'){
+                            $('#id-login_p-info').text(r);
+                        }
+                        else{
+                            $(window.location.href = r)
+                        }
+                        //$('#id-login_p-info').text(r);
+                        //$(window.location.href = URL)
+                    }
+
+                };
+                $.ajax(request);
+
+            });
+
+        })
+    </script>
 </head>
 <body>
 <h1>登录</h1>
- {% for m in get_flashed_messages() %}
-    <h4>{{ m }}</h4>
-    {% endfor %}
+<input id="id-login_text-username"  type="text">
+<input id="id-login_text-password"  type="password">
+<button type="submit" id="id-login_button-submit" class="pure-button pure-button-primary">登陆</button>
+<p id="id-login_p-info"></p>
 
-<form class="pure-form" action="/login" method="POST">
-    <fieldset>
-
-        <input name="username" type="text" placeholder="username">
-        <input name="password" type="password" placeholder="Password">
-
-        <button type="submit" class="pure-button pure-button-primary">登陆</button>
-    </fieldset>
-</form>
 <h1>注册</h1>
-
-<form class="pure-form" action="/register" method="POST">
-    <input name="username" type="text" placeholder="username">
-    <input name="password" type="password" placeholder="Password">
-    <button type="submit" class="pure-button pure-button-primary">注册</button>
-
-</form>
+<input id="id-text-username"  type="text">
+<input id="id-text-password"  type="password">
+<button id="id-button-submit" class="pure-button pure-button-primary" >注册</button>
+<p id="id-p-info"></p>
 </body>
 </html>

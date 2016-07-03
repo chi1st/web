@@ -27,6 +27,12 @@ class User(db.Model):
     password = db.Column(db.String())
     role = db.Column(db.Integer, default=2)
     bloglist = db.relationship('Bloglist', backref='user')
+    # followed = db.relationship('User',
+    #     secondary = followers,
+    #     primaryjoin = (followers.c.follower_id == id),
+    #     secondaryjoin = (followers.c.followed_id == id),
+    #     backref = db.backref('followers', lazy = 'dynamic'),
+    #     lazy = 'dynamic')
     # 一对多,blog通过user来确定是谁发的博客
 
 
@@ -103,7 +109,7 @@ class Bloglist(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
-    blog_title = db.Column(db.Integer, db.ForeignKey('bloglists.title'))
+    blog_id = db.Column(db.Integer, db.ForeignKey('bloglists.id'))
     comment_content = db.Column(db.String())
     poster = db.Column(db.Integer)
 
@@ -121,6 +127,12 @@ class Comment(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+#
+# class Follow(db.Model):
+#     __tablename__ = 'followers'
+#     follower_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+#     followed_id = db.Column(db.Integer,db.ForeignKey('users.id'))
 
 
 def backup_db():

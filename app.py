@@ -41,6 +41,8 @@ def login():
     print('u', u)
     print('u.username', u.username)
     user = User.query.filter_by(username=u.username).first()
+    x = User.query.filter(User.username != 'admin').all()
+    print('x',x)
     print('user', user)
     # print('user.username',user.username)
     log(user)
@@ -48,11 +50,13 @@ def login():
     if user == None:
         log('用户登录失败')
         flash('此用户不存在')
-        return redirect(url_for('login_view'))
+        #return redirect(url_for
+        return '此用户不存在'
     elif user.validate(u):
         log('用户登录成功')
         session['user_id'] = user.id
-        r = redirect(url_for('bloglist_view', username=user.username))
+        r = url_for('bloglist_view', username=user.username)
+        print('r',r)
         # cookie_id = str(uuid.uuid4())
         # cookie_dict[cookie_id] = user
         # r.set_cookie('cookie_id', cookie_id)
@@ -60,7 +64,8 @@ def login():
     else:
         log('用户登录失败')
         flash('用户密码错误')
-        return redirect(url_for('login_view'))
+        #return redirect(url_for('login_view'))
+        return '用户密码错误'
 
 
 @app.route('/register', methods=['POST'])
@@ -73,11 +78,13 @@ def register():
         flash('注册成功')
         log('用户注册成功')
         u.save()
-        return redirect(url_for('login_view'))
+        #return redirect(url_for('login_view'))
+        return '注册成功'
     else:
-        flash('注册失败')
+        flash('失败')
         log('注册失败', request.form)
-        return redirect(url_for('login_view'))
+        #return redirect(url_for('login_view'))
+        return '注册失败'
 
 
 @app.route('/bloglist/<username>')
@@ -101,13 +108,14 @@ def bloglist_view(username):
                            all_users=user_list)
 
 
-@app.route('/bloglist/<username>/<title>')
-def blogdetail(username, title):
+@app.route('/bloglist/<username>/<blog_id>')#title实际上是b.id
+def blogdetail(username, blog_id):
     user = current_user()
     print(user)
-    b = Bloglist.query.filter_by(id=title).first()
+    b = Bloglist.query.filter_by(id=blog_id).first()
     print(b)
-    c = Comment.query.filter_by(blog_title=title).all()
+    print('title',blog_id)
+    c = Comment.query.filter_by(blog_id=blog_id).all()
     print('c', c)
     # print(c.poster)
     print(b)
@@ -115,17 +123,18 @@ def blogdetail(username, title):
     return render_template('blogdetail.html', current_user=user, b=b, c=c)
 
 
-@app.route('/bloglist/comment/<title>', methods=['POST'])
-def bloglist_comment(title):
+@app.route('/bloglist/comment/<blog_id>', methods=['POST'])
+def bloglist_comment(blog_id):
     user = current_user()
     c = Comment(request.form)
     # 设置是谁评论的
-    print(c)
+    print('c',c.comment_content)
     c.poster = user.username
-    c.blog_title = title
+    c.blog_id = blog_id
     # 保存到数据库
     c.save()
-    return redirect(url_for('blogdetail', username=user.username, title=title))
+    print('c.save',c.save())
+    return redirect(url_for('blogdetail', username=user.username, blog_id=blog_id))
 
 
 @app.route('/bloglist/add', methods=['POST'])
@@ -183,6 +192,11 @@ def bloglist_update(bloglist_id):
         t.content = request.form.get('content', '')
         t.save()
         return redirect(url_for('bloglist_view', username=user.username))
+
+
+
+
+
 
 
 if __name__ == '__main__':
