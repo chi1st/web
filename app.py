@@ -26,6 +26,11 @@ def current_user():
     return user
 
 
+@app.route('/logout')
+def logoout():
+    session['user_id'] = None
+    return redirect(url_for('login_view'))
+
 @app.route('/')
 def index():
     return redirect(url_for('login_view'))
