@@ -12,6 +12,7 @@ from flask import session
 from models import User
 from models import Bloglist
 from models import Comment
+from models import Followers
 from chilog import log
 
 app = Flask(__name__)
@@ -193,7 +194,26 @@ def bloglist_update(bloglist_id):
         t.save()
         return redirect(url_for('bloglist_view', username=user.username))
 
-
+@app.route('/follow/<followed_username>')
+def follow(followed_username):
+    print(followed_username)
+    user = current_user()
+    print('current_user',user)
+    if user is None:
+        return redirect(url_for('login_view'))
+    else:
+        f = Followers()
+        print(f)
+        # 设置是谁发的
+        f.follower_id = user.id
+        f.followed_id = followed_username
+        # 保存到数据库
+        #print(f)
+        f.save()
+        # print(user.followed_id)
+        # print(user.follower_id)
+        print(user.followed_id)
+        return redirect(url_for('bloglist_view', username=user.username))
 
 
 

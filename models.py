@@ -20,6 +20,28 @@ def comver_to_hash(content):
     return hash
 
 
+class Followers(db.Model):
+    __tablename__ = 'followers'
+    id = db.Column(db.Integer, primary_key=True)
+    follower_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    followed_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+
+    def __init__(self):
+        super(Followers, self).__init__()
+
+    def __repr__(self):
+        class_name = self.__class__.__name__
+        return u'<{}: {}>'.format(class_name, self.id)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -27,6 +49,10 @@ class User(db.Model):
     password = db.Column(db.String())
     role = db.Column(db.Integer, default=2)
     bloglist = db.relationship('Bloglist', backref='user')
+    follower_id = db.relationship('Followers', foreign_keys=[Followers.follower_id], backref='follower_user')
+    followed_id = db.relationship('Followers', foreign_keys=[Followers.followed_id], backref='followed_user')
+    #follower_id = db.relationship('Followers',backref ='follower')
+    #followed_id = db.relationship('Followers',backref ='followed')
     # followed = db.relationship('User',
     #     secondary = followers,
     #     primaryjoin = (followers.c.follower_id == id),
@@ -128,11 +154,7 @@ class Comment(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-#
-# class Follow(db.Model):
-#     __tablename__ = 'followers'
-#     follower_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-#     followed_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+
 
 
 def backup_db():

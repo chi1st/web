@@ -30,7 +30,7 @@
     <div>
         <h2>用户列表</h2>
         {% for all in all_users %}
-        <a href="/bloglist/{{all.username}}"><p>{{all.username}}</p></a><a href="/follow"><p>关注</p></a>
+        <a href="/bloglist/{{all.username}}"><p>{{all.username}}</p></a><a href="/follow/{{all.id}}"><p>关注</p></a>
         {% endfor %}
     </div>
 </div>
